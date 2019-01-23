@@ -70,7 +70,7 @@ CREATE TABLE `Account_Notification` (
 
 CREATE TABLE `Message` (
 	`id` INT NOT NULL AUTO_INCREMENT,
-	`text` varchar(128) NOT NULL,
+	`text` varchar(128) entityNOT NULL,
 	`from_account_id` INT NOT NULL,
 	`to_account_id` INT NOT NULL,
 	`time` DATETIME NOT NULL,
