@@ -1,5 +1,6 @@
 package ua.od.game.model;
 
+import java.sql.Timestamp;
 import java.util.Date;
 
 public class MessageEntity {
@@ -33,12 +34,12 @@ public class MessageEntity {
         this.fromAccountId = fromAccountId;
     }
 
-    public void setToAccountId(Integer toAccountId) {
-        this.toAccountId = toAccountId;
-    }
-  
     public Integer getToAccountId() {
         return toAccountId;
+    }
+
+    public void setToAccountId(Integer toAccountId) {
+        this.toAccountId = toAccountId;
     }
 
     public Date getTime() {

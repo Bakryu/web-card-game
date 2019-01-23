@@ -10,32 +10,32 @@ import java.util.List;
 
 public class RoomDaoImpl implements RoomDao {
 
-    private final String JOIN_ROOM_QUERY_ROOM_QUERY = new StringBuilder()
+    private static final String JOIN_ROOM_QUERY_ROOM_QUERY = new StringBuilder()
             .append("UPDATE room ")
             .append("SET user_1_id = CASE WHEN user_1_id IS NULL ")
-                                 .append("THEN ? ")
-                                 .append("ELSE user_1_id END, ")
-                .append("user_2_id = CASE WHEN user_1_id IS NOT NULL AND user_2_id IS NULL AND user_1_id <> ? ")
-                                 .append("THEN ? ")
-                                 .append("ELSE user_2_id END ")
+            .append("THEN ? ")
+            .append("ELSE user_1_id END, ")
+            .append("user_2_id = CASE WHEN user_1_id IS NOT NULL AND user_2_id IS NULL AND user_1_id <> ? ")
+            .append("THEN ? ")
+            .append("ELSE user_2_id END ")
             .append("WHERE id = ?")
             .toString();
-    private final String LEAVE_ROOM_QUERY_ROOM_QUERY = new StringBuilder()
+    private static final String LEAVE_ROOM_QUERY_ROOM_QUERY = new StringBuilder()
             .append("UPDATE room ")
             .append("SET user_1_id = CASE WHEN user_1_id = ? ")
-                                 .append("THEN NULL ")
-                                 .append("ELSE user_1_id END, ")
-                .append("user_2_id = CASE WHEN user_2_id = ? ")
-                                 .append("THEN NULL ")
-                                 .append("ELSE user_2_id END ")
+            .append("THEN NULL ")
+            .append("ELSE user_1_id END, ")
+            .append("user_2_id = CASE WHEN user_2_id = ? ")
+            .append("THEN NULL ")
+            .append("ELSE user_2_id END ")
             .append("WHERE user_1_id = ? OR user_2_id = ?")
             .toString();
-    private final String GET_ROOM_LIST_QUERY = "SELECT * FROM room";
-    private final String CHECK_ROOM_IS_FULL_QUERY = "SELECT account_1_id, account_2_id FROM room WHERE id = ?";
-    private final String GET_USER_NAME_BY_ID = "SELECT account.name FROM room JOIN account ON room.account_?_id = account.id WHERE room.id = ?";
-    private final String CHECK_FOR_EXISTENCE_OF_USER = "SELECT id FROM user WHERE id = ?";
-    private final String CHECK_FOR_EXISTENCE_OF_ROOM = "SELECT id FROM room WHERE id = ?";
-    private final String USER_IN_THE_ROOM = "SELECT account_1_id, account_2_id FROM room WHERE account_1_id = ? OR user_2_id = ?";
+    private static final String GET_ROOM_LIST_QUERY = "SELECT * FROM room";
+    private static final String CHECK_ROOM_IS_FULL_QUERY = "SELECT account_1_id, account_2_id FROM room WHERE id = ?";
+    private static final String GET_USER_NAME_BY_ID = "SELECT account.name FROM room JOIN account ON room.account_?_id = account.id WHERE room.id = ?";
+    private static final String CHECK_FOR_EXISTENCE_OF_USER = "SELECT id FROM user WHERE id = ?";
+    private static final String CHECK_FOR_EXISTENCE_OF_ROOM = "SELECT id FROM room WHERE id = ?";
+    private static final String USER_IN_THE_ROOM = "SELECT account_1_id, account_2_id FROM room WHERE account_1_id = ? OR user_2_id = ?";
 
     public List<RoomEntity> getRoomList() {
         return SqlHelper.prepareStatement(GET_ROOM_LIST_QUERY, statementForRoomList -> {
