@@ -1,7 +1,6 @@
 package ua.od.game.repository.dao.impl;
 
 import ua.od.game.model.BuildingEntity;
-import ua.od.game.model.ResourceSetEntity;
 import ua.od.game.repository.dao.BuildingDao;
 import ua.od.game.repository.helper.SqlHelper;
 

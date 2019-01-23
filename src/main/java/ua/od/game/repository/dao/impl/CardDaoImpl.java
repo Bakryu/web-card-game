@@ -3,7 +3,6 @@ package ua.od.game.repository.dao.impl;
 import ua.od.game.model.BuildingSetEntity;
 import ua.od.game.model.CardEntity;
 import ua.od.game.model.CardGroupEntity;
-import ua.od.game.model.ResourceSetEntity;
 import ua.od.game.repository.dao.CardDao;
 import ua.od.game.repository.helper.SqlHelper;
 
