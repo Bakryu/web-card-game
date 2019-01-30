@@ -31,3 +31,4 @@ public class CardGroupEntity {
         this.description = description;
     }
 }
+
