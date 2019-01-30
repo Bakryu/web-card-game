@@ -44,7 +44,7 @@ public class MessageDaoImpl implements MessageDao {
             pstmt.setString(1, message.getText());
             pstmt.setInt(2, message.getFromAccountId());
             pstmt.setInt(3, message.getToAccountId());
-            pstmt.setDate(4, new java.sql.Date(message.getTime().getTime()));
+            pstmt.setTimestamp(4, new Timestamp(message.getTime().getTime()));
             return pstmt.executeUpdate() > 0;
         });
         if(!isOk) {

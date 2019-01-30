@@ -19,7 +19,9 @@ public class AccountAchievementDaoImplTest extends DbTest {
     }
     @Test
    public void getUserAchievementsList(){
-        List<AccountAchievementEntity> accountAchievementEntities = achievementDao.getUserAchievementsList(2);
+
+        List<AccountAchievementEntity>accountAchievementEntities = achievementDao.getUserAchievementsList(2);
+
         for (int i = 0; i < accountAchievementEntities.size(); i++) {
             System.out.println(accountAchievementEntities.get(i).getId() + " ");
             System.out.println(accountAchievementEntities.get(i).getAccountAchievementId() + " ");

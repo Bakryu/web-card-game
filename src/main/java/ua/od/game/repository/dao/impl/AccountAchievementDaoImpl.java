@@ -14,9 +14,9 @@ public class AccountAchievementDaoImpl implements AccountAchievementDao {
 
     @Override
     public List<AccountAchievementEntity> getUserAchievementsList(Integer accountId) {
-        return SqlHelper.prepareStatement(GET_ACCOUNT_ACHIEVEMENT_LIST, statement -> {
-            statement.setInt(1, accountId);
-            ResultSet resultSet = statement.executeQuery();
+        return SqlHelper.prepareStatement(GET_ACCOUNT_ACHIEVEMENT_LIST, query -> {
+            query.setInt(1, accountId);
+            ResultSet resultSet = query.executeQuery();
             List<AccountAchievementEntity> result = new LinkedList<>();
             while (resultSet.next()) {
                 result.add(new AccountAchievementEntity() {{

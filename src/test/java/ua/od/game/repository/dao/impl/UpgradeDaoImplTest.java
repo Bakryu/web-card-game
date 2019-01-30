@@ -19,6 +19,6 @@ public class UpgradeDaoImplTest extends DbTest {
     @Test
     public void getAllUpgradeList() {
         Assert.assertFalse(upgradeDao.getAllUpgradeList().isEmpty());
-        System.out.println(upgradeDao.getAllUpgradeList());
+        upgradeDao.getAllUpgradeList().forEach(System.out::println);
     }
 }
