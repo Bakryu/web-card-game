@@ -34,7 +34,7 @@ public class CardDaoImpl implements CardDao {
 
         return SqlHelper.prepareStatement(GET_ALL_CARDS, statement -> {
             ResultSet rs = statement.executeQuery();
-            List<CardEntity> cards = new ArrayList<>();
+            List<CardEntity> cards = new ArrayList();
             CardEntity currentCard = new CardEntity();
 
             while (rs.next()) {
@@ -55,18 +55,18 @@ public class CardDaoImpl implements CardDao {
 
     private CardEntity fetchCardEntity(ResultSet rs, List<CardEntity> cards, CardEntity currentCard) throws SQLException {
 
-        if (currentCard.getId()!= null && currentCard.getId() == rs.getInt("c_id")) return currentCard;
+        if (currentCard.getId() != null && currentCard.getId() == rs.getInt("c_id")) return currentCard;
         CardEntity card = new CardEntity() {{
             setId(rs.getInt("c_id"));
             setName(rs.getString("c_name"));
             setDescription(rs.getString("c_description"));
             setCardGroup(getCardGroupEntity(rs));
-            setPalayerResourceSetList(new ArrayList<>());
-            setPalayerBuildingSetList(new ArrayList<>());
-            setPalayerUpgradeSetList(new ArrayList<>());
-            setEnemyResourceSetList(new ArrayList<>());
-            setEnemyBuildingSetList(new ArrayList<>());
-            setEnemyUpgradeSetList(new ArrayList<>());
+            setPalayerResourceSetList(new ArrayList());
+            setPalayerBuildingSetList(new ArrayList());
+            setPalayerUpgradeSetList(new ArrayList());
+            setEnemyResourceSetList(new ArrayList());
+            setEnemyBuildingSetList(new ArrayList());
+            setEnemyUpgradeSetList(new ArrayList());
 
         }};
 
