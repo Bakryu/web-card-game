@@ -7,89 +7,160 @@ import ua.od.game.repository.helper.SqlHelper;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 public class CardDaoImpl implements CardDao {
-    private static final String GET_CARD = "SELECT c.id c_id , c.name c_name , c.description c_description , cg.id cg_id , cg.name cg_name , cg.description cg_description  , rs.id rs_id , rs.set_id rs_set_id , rs.resource_id rs_resource_id  , rs.amount rs_amount , bs.id bs_id , bs.set_id bs_set_id , bs.building_id bs_building_id , bs.amount bs_amount , us.id us_id , us.set_id us_set_id , us.upgrade_id us_upgrade_id , us.amount us_amount  FROM Card c\n" +
-            " LEFT JOIN Card_Group cg on c.card_group_id = cg.id \n" +
-            " LEFT JOIN Resource_Set rs on c.player_resource_set_id = rs.set_id\n" +
-            "and c.enemy_resource_set_id = rs.set_id\n" +
-            " LEFT JOIN Building_Set bs on c.player_building_set_id = bs.set_id\n" +
-            "and c.enemy_building_set_id = bs.set_id\n" +
-            " LEFT JOIN Upgrade_Set us on c.player_upgrade_set_id = us.set_id\n" +
-            "and c.enemy_upgrade_set_id = us.set_id\n" +
-            " ORDER BY c.id;";
+
+    private static final String GET_ALL_CARDS = "SELECT c.id c_id, c.name c_name, c.description c_description,\n" +
+            "cg.id cg_id, cg.name cg_name, cg.description cg_description,\n" +
+            "p_rs.set_id p_rs_set_id, p_rs.resource_id p_rs_resource_id, p_rs.amount p_rs_amount,\n" +
+            "p_bs.set_id p_bs_set_id, p_bs.building_id p_bs_building_id, p_bs.amount p_bs_amount,\n" +
+            "p_us.set_id p_us_set_id, p_us.upgrade_id p_us_upgrade_id, p_us.amount p_us_amount,\n" +
+            "e_rs.set_id e_rs_set_id, e_rs.resource_id e_rs_resource_id, e_rs.amount e_rs_amount,\n" +
+            "e_bs.set_id e_bs_set_id, e_bs.building_id e_bs_building_id, e_bs.amount e_bs_amount,\n" +
+            "e_us.set_id e_us_set_id, e_us.upgrade_id e_us_upgrade_id, e_us.amount e_us_amount\n" +
+            "FROM Card c\n" +
+            "INNER JOIN Card_Group cg on c.id = cg.id\n" +
+            "INNER JOIN Resource_Set p_rs on c.player_resource_set_id = p_rs.set_id\n" +
+            "INNER JOIN Building_Set p_bs on c.player_building_set_id = p_bs.set_id\n" +
+            "INNER JOIN Upgrade_Set p_us on c.player_upgrade_set_id = p_us.set_id\n" +
+            "INNER JOIN Resource_Set e_rs on c.enemy_resource_set_id = e_rs.set_id\n" +
+            "INNER JOIN Building_Set e_bs on c.enemy_building_set_id = e_bs.set_id\n" +
+            "INNER JOIN Upgrade_Set e_us on c.enemy_upgrade_set_id = e_us.set_id\n" +
+            "ORDER BY c_id;";
 
 
-    @Override
     public List<CardEntity> getAllCardList() {
-        return SqlHelper.prepareStatement(GET_CARD, statementForCardList -> {
-            ResultSet cardsResultSet = statementForCardList.executeQuery();
-            List<CardEntity> cards = new LinkedList<>();
 
-            while (cardsResultSet.next()) {
-                cards.add(new CardEntity() {{
-                    setId(cardsResultSet.getInt("id"));
-                    setName(cardsResultSet.getString("name"));
-                    setDescription(cardsResultSet.getString("description"));
-                    setCardGroup(getCardGropEntity(cardsResultSet));
-                    setPalayerResourceSetList(getResorceSetEntity(cardsResultSet));
-                    setPalayerBuildingSetList(getBuildingSetEntity(cardsResultSet));
-                    setPalayerUpgradeSetList(getUpgradeSetEntity(cardsResultSet));
-                    setEnemyResourceSetList(getResorceSetEntity(cardsResultSet));
-                    setEnemyBuildingSetList(getBuildingSetEntity(cardsResultSet));
-                    setEnemyUpgradeSetList(getUpgradeSetEntity(cardsResultSet));
-                }});
+        return SqlHelper.prepareStatement(GET_ALL_CARDS, statement -> {
+            ResultSet rs = statement.executeQuery();
+            List<CardEntity> cards = new ArrayList<>();
+            CardEntity currentCard = new CardEntity();
 
+            while (rs.next()) {
+                currentCard = fetchCardEntity(rs, cards, currentCard);
+                fetchPlayerResourceSetEntity(rs, currentCard.getPalayerResourceSetList());
+                fetchPlayerBuildingSetEntity(rs, currentCard.getPalayerBuildingSetList());
+                fetchPlayerUpgradeSetEntity(rs, currentCard.getPalayerUpgradeSetList());
+                fetchEnemyResourceSetEntity(rs, currentCard.getEnemyResourceSetList());
+                fetchEnemyBuildingSetEntity(rs, currentCard.getEnemyBuildingSetList());
+                fetchEnemyUpgradeSetEntity(rs, currentCard.getEnemyUpgradeSetList());
             }
+
             return cards;
+
         });
 
+    }
+
+    private CardEntity fetchCardEntity(ResultSet rs, List<CardEntity> cards, CardEntity currentCard) throws SQLException {
+
+        if (currentCard.getId()!= null && currentCard.getId() == rs.getInt("c_id")) return currentCard;
+        CardEntity card = new CardEntity() {{
+            setId(rs.getInt("c_id"));
+            setName(rs.getString("c_name"));
+            setDescription(rs.getString("c_description"));
+            setCardGroup(getCardGroupEntity(rs));
+            setPalayerResourceSetList(new ArrayList<>());
+            setPalayerBuildingSetList(new ArrayList<>());
+            setPalayerUpgradeSetList(new ArrayList<>());
+            setEnemyResourceSetList(new ArrayList<>());
+            setEnemyBuildingSetList(new ArrayList<>());
+            setEnemyUpgradeSetList(new ArrayList<>());
+
+        }};
+
+        cards.add(card);
+
+
+        return card;
 
     }
 
-    private CardGroupEntity getCardGropEntity(ResultSet cardsResultSet) throws SQLException {
-        CardGroupEntity cardGroupEntity = new CardGroupEntity();
-        cardGroupEntity.setId(cardsResultSet.getInt("cg.id"));
-        cardGroupEntity.setName(cardsResultSet.getString("cg.name"));
-        cardGroupEntity.setDescription(cardsResultSet.getString("cg.description"));
-        return cardGroupEntity;
+    private CardGroupEntity getCardGroupEntity(ResultSet rs) throws SQLException {
+        CardGroupEntity cg_entity = new CardGroupEntity();
+        cg_entity.setId(rs.getInt("cg_id"));
+        cg_entity.setName(rs.getString("cg_name"));
+        cg_entity.setDescription(rs.getString("cg_description"));
+        return cg_entity;
+    }
+
+    private void fetchPlayerBuildingSetEntity(ResultSet rs, List<BuildingSetEntity> buildingSetEntities) throws SQLException {
+
+        if (rs.getString("p_bs_set_id") == null) return;
+        buildingSetEntities.add(new BuildingSetEntity() {{
+            setId(rs.getInt("p_bs_id"));
+            setSetId(rs.getInt("p_bs_set_id"));
+            setBuildingId(rs.getInt("p_bs_building_id"));
+            setAmount(rs.getFloat("p_bs_amount"));
+
+        }});
 
     }
 
-    private List<ResourceSetEntity> getResorceSetEntity(ResultSet cardsResaltSet) throws SQLException {
-        List<ResourceSetEntity> resourceSetEntityList = new ArrayList<>();
-        ResourceSetEntity resourceSetEntity = new ResourceSetEntity();
-        resourceSetEntity.setId(cardsResaltSet.getInt("rs.id"));
-        resourceSetEntity.setSetId(cardsResaltSet.getInt("rs.setId"));
-        resourceSetEntity.setResourceId(cardsResaltSet.getInt("rs.resourceId"));
-        resourceSetEntity.setAmount(cardsResaltSet.getFloat("rs.amount"));
-        resourceSetEntityList.add(resourceSetEntity);
+    private void fetchPlayerResourceSetEntity(ResultSet rs, List<ResourceSetEntity> resourceSetEntities) throws SQLException {
 
-        return resourceSetEntityList;
+        if (rs.getString("p_rs_set_id") == null) return;
+        resourceSetEntities.add(new ResourceSetEntity() {{
+            setId(rs.getInt("p_rs_id"));
+            setSetId(rs.getInt("p_rs_set_id"));
+            setResourceId(rs.getInt("p_rs_resource_id"));
+            setAmount(rs.getFloat("p_rs_amount"));
+
+        }});
+
     }
 
-    private List<BuildingSetEntity> getBuildingSetEntity(ResultSet cardsResaltSet) throws SQLException {
-        List<BuildingSetEntity> buildingSetEntitiesSet = new ArrayList<>();
-        BuildingSetEntity buildingSetEntity = new BuildingSetEntity();
-        buildingSetEntity.setId(cardsResaltSet.getInt("bs.id"));
-        buildingSetEntity.setSetId(cardsResaltSet.getInt("bs.setId"));
-        buildingSetEntity.setBuildingId(cardsResaltSet.getInt("bs.buildingId"));
-        buildingSetEntity.setAmount(cardsResaltSet.getFloat("bs.amount"));
-        buildingSetEntitiesSet.add(buildingSetEntity);
-        return buildingSetEntitiesSet;
+    private void fetchPlayerUpgradeSetEntity(ResultSet rs, List<UpgradeSetEntity> upgradeSetEntities) throws SQLException {
+
+        if (rs.getString("p_us_set_id") == null) return;
+        upgradeSetEntities.add(new UpgradeSetEntity() {{
+            setId(rs.getInt("p_us_id"));
+            setSetId(rs.getInt("p_us_set_id"));
+            setUpgradeId(rs.getInt("p_us_upgrade_id"));
+            setAmount(rs.getFloat("p_us_amount"));
+
+        }});
+
     }
 
-    private List<UpgradeSetEntity> getUpgradeSetEntity(ResultSet cardsResaltSet) throws SQLException {
-        List<UpgradeSetEntity> upgradeSetEntitisList = new ArrayList<>();
-        UpgradeSetEntity upgradeSetEntitie = new UpgradeSetEntity();
-        upgradeSetEntitie.setId(cardsResaltSet.getInt("us.id"));
-        upgradeSetEntitie.setSetId(cardsResaltSet.getInt("us.setId"));
-        upgradeSetEntitie.setUpgradeId(cardsResaltSet.getInt("us.resourceId"));
-        upgradeSetEntitie.setAmount(cardsResaltSet.getFloat("us.amount"));
-        upgradeSetEntitisList.add(upgradeSetEntitie);
-        return upgradeSetEntitisList;
+    private void fetchEnemyBuildingSetEntity(ResultSet rs, List<BuildingSetEntity> buildingSetEntities) throws SQLException {
+
+        if (rs.getString("e_bs_set_id") == null) return;
+        buildingSetEntities.add(new BuildingSetEntity() {{
+            setId(rs.getInt("e_bs_id"));
+            setSetId(rs.getInt("e_bs_set_id"));
+            setBuildingId(rs.getInt("e_bs_building_id"));
+            setAmount(rs.getFloat("e_bs_amount"));
+
+        }});
+
+    }
+
+    private void fetchEnemyResourceSetEntity(ResultSet rs, List<ResourceSetEntity> resourceSetEntities) throws SQLException {
+
+        if (rs.getString("e_rs_set_id") == null) return;
+        resourceSetEntities.add(new ResourceSetEntity() {{
+            setId(rs.getInt("e_rs_id"));
+            setSetId(rs.getInt("e_rs_set_id"));
+            setResourceId(rs.getInt("e_rs_resource_id"));
+            setAmount(rs.getFloat("e_rs_amount"));
+
+        }});
+
+    }
+
+    private void fetchEnemyUpgradeSetEntity(ResultSet rs, List<UpgradeSetEntity> upgradeSetEntities) throws SQLException {
+
+        if (rs.getString("e_us_set_id") == null) return;
+        upgradeSetEntities.add(new UpgradeSetEntity() {{
+            setId(rs.getInt("e_us_id"));
+            setSetId(rs.getInt("e_us_set_id"));
+            setUpgradeId(rs.getInt("e_us_upgrade_id"));
+            setAmount(rs.getFloat("e_us_amount"));
+
+        }});
+
     }
 }
 

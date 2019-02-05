@@ -15,6 +15,7 @@ public class CardEntity {
     private List<ResourceSetEntity> enemyResourceSetList;
     private List<BuildingSetEntity> enemyBuildingSetList;
     private List<UpgradeSetEntity> enemyUpgradeSetList;
+
     public Integer getId() {
         return id;
     }
