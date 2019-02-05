@@ -54,8 +54,8 @@ public class MessageDaoImplTest extends DbTest {
         List<MessageEntity> messages = messageDao.getMessageList(FROM_ACCOUNT_ID, TO_ACCOUNT_ID, GET_DATETIME);
         {
             Boolean checkFlag = false;
-            for (MessageEntity mesages : messages) {
-                if (mesages.getText().equals(TEST_MESSAGE)) {
+            for (MessageEntity message : messages) {
+                if (message.getText().equals(TEST_MESSAGE)) {
                     checkFlag = true;
                     break;
                 }

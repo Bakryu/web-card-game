@@ -23,6 +23,7 @@ public class RoomServiceImpl implements RoomService {
         return rooms;
     }
 
+
     public void joinRoom(Integer roomId, Integer userId) {
         roomDao.joinRoom(roomId, userId);
     }

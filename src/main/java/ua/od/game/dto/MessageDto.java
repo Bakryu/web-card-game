@@ -48,4 +48,15 @@ public class MessageDto {
     public void setTime(Date time) {
         this.time = time;
     }
+
+    @Override
+    public String toString() {
+        return "MessageDto{" +
+                "id=" + id +
+                ", text='" + text + '\'' +
+                ", fromAccountId=" + fromAccountId +
+                ", toAccountId=" + toAccountId +
+                ", time=" + time +
+                '}';
+    }
 }
