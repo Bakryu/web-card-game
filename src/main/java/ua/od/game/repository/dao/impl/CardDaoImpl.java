@@ -13,12 +13,12 @@ public class CardDaoImpl implements CardDao {
 
     private static final String GET_ALL_CARDS = "SELECT c.id c_id, c.name c_name, c.description c_description,\n" +
             "cg.id cg_id, cg.name cg_name, cg.description cg_description,\n" +
-            "p_rs.set_id p_rs_set_id, p_rs.resource_id p_rs_resource_id, p_rs.amount p_rs_amount,\n" +
-            "p_bs.set_id p_bs_set_id, p_bs.building_id p_bs_building_id, p_bs.amount p_bs_amount,\n" +
-            "p_us.set_id p_us_set_id, p_us.upgrade_id p_us_upgrade_id, p_us.amount p_us_amount,\n" +
-            "e_rs.set_id e_rs_set_id, e_rs.resource_id e_rs_resource_id, e_rs.amount e_rs_amount,\n" +
-            "e_bs.set_id e_bs_set_id, e_bs.building_id e_bs_building_id, e_bs.amount e_bs_amount,\n" +
-            "e_us.set_id e_us_set_id, e_us.upgrade_id e_us_upgrade_id, e_us.amount e_us_amount\n" +
+            "p_rs.id p_rs_id, p_rs.set_id p_rs_set_id, p_rs.resource_id p_rs_resource_id, p_rs.amount p_rs_amount,\n" +
+            "p_bs.id p_bs_id, p_bs.set_id p_bs_set_id, p_bs.building_id p_bs_building_id, p_bs.amount p_bs_amount,\n" +
+            "p_us.id p_us_id, p_us.set_id p_us_set_id, p_us.upgrade_id p_us_upgrade_id, p_us.amount p_us_amount,\n" +
+            "e_rs.id e_rs_id, e_rs.set_id e_rs_set_id, e_rs.resource_id e_rs_resource_id, e_rs.amount e_rs_amount,\n" +
+            "e_bs.id e_bs_id, e_bs.set_id e_bs_set_id, e_bs.building_id e_bs_building_id, e_bs.amount e_bs_amount,\n" +
+            "e_us.id e_us_id, e_us.set_id e_us_set_id, e_us.upgrade_id e_us_upgrade_id, e_us.amount e_us_amount\n" +
             "FROM Card c\n" +
             "INNER JOIN Card_Group cg on c.id = cg.id\n" +
             "INNER JOIN Resource_Set p_rs on c.player_resource_set_id = p_rs.set_id\n" +
@@ -89,6 +89,7 @@ public class CardDaoImpl implements CardDao {
 
         if (rs.getString("p_bs_set_id") == null) return;
         buildingSetEntities.add(new BuildingSetEntity() {{
+            setId(rs.getInt("p_bs_id"));
             setSetId(rs.getInt("p_bs_set_id"));
             setBuildingId(rs.getInt("p_bs_building_id"));
             setAmount(rs.getFloat("p_bs_amount"));
@@ -101,6 +102,7 @@ public class CardDaoImpl implements CardDao {
 
         if (rs.getString("p_rs_set_id") == null) return;
         resourceSetEntities.add(new ResourceSetEntity() {{
+            setId(rs.getInt("p_rs_id"));
             setSetId(rs.getInt("p_rs_set_id"));
             setResourceId(rs.getInt("p_rs_resource_id"));
             setAmount(rs.getFloat("p_rs_amount"));
@@ -113,6 +115,7 @@ public class CardDaoImpl implements CardDao {
 
         if (rs.getString("p_us_set_id") == null) return;
         upgradeSetEntities.add(new UpgradeSetEntity() {{
+            setId(rs.getInt("p_us_id"));
             setSetId(rs.getInt("p_us_set_id"));
             setUpgradeId(rs.getInt("p_us_upgrade_id"));
             setAmount(rs.getFloat("p_us_amount"));
@@ -125,6 +128,7 @@ public class CardDaoImpl implements CardDao {
 
         if (rs.getString("e_bs_set_id") == null) return;
         buildingSetEntities.add(new BuildingSetEntity() {{
+            setId(rs.getInt("e_bs_id"));
             setSetId(rs.getInt("e_bs_set_id"));
             setBuildingId(rs.getInt("e_bs_building_id"));
             setAmount(rs.getFloat("e_bs_amount"));
@@ -137,6 +141,7 @@ public class CardDaoImpl implements CardDao {
 
         if (rs.getString("e_rs_set_id") == null) return;
         resourceSetEntities.add(new ResourceSetEntity() {{
+            setId(rs.getInt("e_rs_id"));
             setSetId(rs.getInt("e_rs_set_id"));
             setResourceId(rs.getInt("e_rs_resource_id"));
             setAmount(rs.getFloat("e_rs_amount"));
@@ -149,6 +154,7 @@ public class CardDaoImpl implements CardDao {
 
         if (rs.getString("e_us_set_id") == null) return;
         upgradeSetEntities.add(new UpgradeSetEntity() {{
+            setId(rs.getInt("e_us_id"));
             setSetId(rs.getInt("e_us_set_id"));
             setUpgradeId(rs.getInt("e_us_upgrade_id"));
             setAmount(rs.getFloat("e_us_amount"));
