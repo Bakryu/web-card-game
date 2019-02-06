@@ -21,6 +21,10 @@ public class CardDaoImplTest extends DbTest {
 
 List<CardEntity> card = cardDao.getAllCardList();
         System.out.println(card.size());
+        for (int i = 0; i <card.size(); i++) {
+            System.out.println(card.get(i).getName());
+
+        }
 
         }
 

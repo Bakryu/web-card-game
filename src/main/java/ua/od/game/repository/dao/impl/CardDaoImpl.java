@@ -89,7 +89,6 @@ public class CardDaoImpl implements CardDao {
 
         if (rs.getString("p_bs_set_id") == null) return;
         buildingSetEntities.add(new BuildingSetEntity() {{
-            setId(rs.getInt("p_bs_id"));
             setSetId(rs.getInt("p_bs_set_id"));
             setBuildingId(rs.getInt("p_bs_building_id"));
             setAmount(rs.getFloat("p_bs_amount"));
@@ -102,7 +101,6 @@ public class CardDaoImpl implements CardDao {
 
         if (rs.getString("p_rs_set_id") == null) return;
         resourceSetEntities.add(new ResourceSetEntity() {{
-            setId(rs.getInt("p_rs_id"));
             setSetId(rs.getInt("p_rs_set_id"));
             setResourceId(rs.getInt("p_rs_resource_id"));
             setAmount(rs.getFloat("p_rs_amount"));
@@ -115,7 +113,6 @@ public class CardDaoImpl implements CardDao {
 
         if (rs.getString("p_us_set_id") == null) return;
         upgradeSetEntities.add(new UpgradeSetEntity() {{
-            setId(rs.getInt("p_us_id"));
             setSetId(rs.getInt("p_us_set_id"));
             setUpgradeId(rs.getInt("p_us_upgrade_id"));
             setAmount(rs.getFloat("p_us_amount"));
@@ -128,7 +125,6 @@ public class CardDaoImpl implements CardDao {
 
         if (rs.getString("e_bs_set_id") == null) return;
         buildingSetEntities.add(new BuildingSetEntity() {{
-            setId(rs.getInt("e_bs_id"));
             setSetId(rs.getInt("e_bs_set_id"));
             setBuildingId(rs.getInt("e_bs_building_id"));
             setAmount(rs.getFloat("e_bs_amount"));
@@ -141,7 +137,6 @@ public class CardDaoImpl implements CardDao {
 
         if (rs.getString("e_rs_set_id") == null) return;
         resourceSetEntities.add(new ResourceSetEntity() {{
-            setId(rs.getInt("e_rs_id"));
             setSetId(rs.getInt("e_rs_set_id"));
             setResourceId(rs.getInt("e_rs_resource_id"));
             setAmount(rs.getFloat("e_rs_amount"));
@@ -154,7 +149,6 @@ public class CardDaoImpl implements CardDao {
 
         if (rs.getString("e_us_set_id") == null) return;
         upgradeSetEntities.add(new UpgradeSetEntity() {{
-            setId(rs.getInt("e_us_id"));
             setSetId(rs.getInt("e_us_set_id"));
             setUpgradeId(rs.getInt("e_us_upgrade_id"));
             setAmount(rs.getFloat("e_us_amount"));
