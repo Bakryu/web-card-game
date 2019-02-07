@@ -37,4 +37,15 @@ public class UpgradeSetEntity {
     public void setAmount(Float amount) {
         this.amount = amount;
     }
+
+    @Override
+    public String toString() {
+        return "UpgradeSetEntity{" +
+                "id=" + id +
+                ", setId=" + setId +
+                ", upgradeId=" + upgradeId +
+                ", amount=" + amount +
+                '}';
+    }
+
 }
