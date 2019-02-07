@@ -6,7 +6,7 @@ public class NotificationDto {
     private Integer id;
     private String name;
     private String description;
-    private Integer defaultNumber;
+    private Integer showFromScratch;
     private List<ResourceSetDto> resourceSetList;
     private List<BuildingSetDto> buildingSetList;
     private List<UpgradeSetDto> upgradeSetList;
