@@ -37,4 +37,5 @@ public class UpgradeSetEntity {
     public void setAmount(Float amount) {
         this.amount = amount;
     }
+
 }
